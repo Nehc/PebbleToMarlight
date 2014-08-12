@@ -27,7 +27,7 @@ enum{
   HYRO_DN = 2  // повернута вниз
 };
 
-/* Индекс для кортежа */  
+/* Индекс для сообщений */  
 enum {
 	STATUS_KEY = 0, 	
 	MESSAGE_KEY = 1
@@ -36,7 +36,7 @@ enum {
 char channel_s[32], command_s[32]; 
 
 #define ACCEL_STEP_MS 100 // частота опроса акселерометра (мс)
-#define GRAVITY 900 // Ускорение свободного падения с точки зрения акселерометра 1000 +/- 100
+#define GRAVITY 900 // Ускорение свободного падения с точки зрения акселерометра pebble 1000 +/- 100
   
 /* Запись сообщения (параметр command) в буфер и отправка на телефон */
 void send_message(char* command){
@@ -91,13 +91,13 @@ static void timer_callback(void *data) {
       if ((current.y == HYRO_UP)&&(old.y == HYRO_NN)){ // если повернули кисть влево 
         channel++; // то следующий по порядку канал 
         if (channel == 5) channel = 1; // по кругу
-        snprintf(channel_s, sizeof("Текущий канал:0"), "Текущий канал:%d", channel);
+        snprintf(channel_s, sizeof("Channel: 0"), "Channel: %d", channel);
         text_layer_set_text(channel_layer, channel_s);  /* показываем сообщение */
       } 
       if ((current.y == HYRO_DN)&&(old.y == HYRO_NN)){ // если повернули кисть вправо 
         channel--; // то предыдущий канал 
         if (channel == 0) channel = 4; // по кругу
-        snprintf(channel_s, sizeof("Текущий канал:0"), "Текущий канал:%d", channel);
+        snprintf(channel_s, sizeof("Channel: 0"), "Channel: %d", channel);
         text_layer_set_text(channel_layer, channel_s);  /* показываем сообщение */
       } 
     }
@@ -135,7 +135,7 @@ void init(void)
   command_layer = config_text_layer(0, 85, 144, 80, FONT_KEY_GOTHIC_28); // текущей команды 
     
   channel = 1; // по умолчанию у нас включен 1-ый канал
-  snprintf(channel_s, sizeof("Текущий канал:0"), "Текущий канал:%d", channel);
+  snprintf(channel_s, sizeof("Channel: 0"), "Channel: %d", channel);
   text_layer_set_text(channel_layer, channel_s);  /* показываем сообщение при запуске программы */
   
 	/* Установка связи между телефоном и часами */

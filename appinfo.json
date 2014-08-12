@@ -12,14 +12,14 @@
     "resources": {
         "media": [
             {
-                "file": "images/screen.png",
-                "name": "SCREEN_SHOT",
-                "type": "png"
-            },
-            {
                 "file": "images/lamp.png",
                 "menuIcon": true,
                 "name": "LAMP_IMAGE",
+                "type": "png"
+            },
+            {
+                "file": "images/screen.png",
+                "name": "SCREEN_SHOT",
                 "type": "png"
             }
         ]
