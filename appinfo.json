@@ -1,0 +1,34 @@
+{
+    "appKeys": {
+        "message": 1,
+        "status": 0
+    },
+    "capabilities": [
+        ""
+    ],
+    "companyName": "cibershaman@gmail.com",
+    "longName": "Light control",
+    "projectType": "native",
+    "resources": {
+        "media": [
+            {
+                "file": "images/screen.png",
+                "name": "SCREEN_SHOT",
+                "type": "png"
+            },
+            {
+                "file": "images/lamp.png",
+                "menuIcon": true,
+                "name": "LAMP_IMAGE",
+                "type": "png"
+            }
+        ]
+    },
+    "shortName": "Light",
+    "uuid": "6038d622-26e2-455f-8901-fe5e1d3ee20e",
+    "versionCode": 1,
+    "versionLabel": "2.0",
+    "watchapp": {
+        "watchface": false
+    }
+}
