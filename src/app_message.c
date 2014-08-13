@@ -27,12 +27,6 @@ enum{
   HYRO_DN = 2  // повернута вниз
 };
 
-/* Индекс для сообщений */  
-enum {
-	STATUS_KEY = 0, 	
-	MESSAGE_KEY = 1
-};
-
 char channel_s[32], command_s[32]; 
 
 #define ACCEL_STEP_MS 100 // частота опроса акселерометра (мс)
@@ -42,10 +36,31 @@ char channel_s[32], command_s[32];
 void send_message(char* command){
 	DictionaryIterator *iter; // создание словаря
 	app_message_outbox_begin(&iter); // начало сообщения
-	dict_write_cstring(iter, MESSAGE_KEY, command); // отправка команды на телефон
+	dict_write_cstring(iter, 0, command); // отправка команды на телефон
   dict_write_end(iter); // конец сообщения
   app_message_outbox_send(); //отправка
 }
+
+// Обработка получения сообщения: просто выводим его в лог
+static void in_received_handler(DictionaryIterator *received, void *context) {
+	Tuple *tuple;
+
+  tuple = dict_find(received, 0);
+	if(tuple) {
+		APP_LOG(APP_LOG_LEVEL_DEBUG, "Received message: %s", tuple->value->cstring);
+	}}
+
+// Если что-то пошло не так при получении
+static void in_dropped_handler(AppMessageResult reason, void *context) {
+		APP_LOG(APP_LOG_LEVEL_DEBUG, "Dropped!");  
+}
+
+// Если что-то пошло не так при отправке
+static void out_failed_handler(DictionaryIterator *failed, AppMessageResult reason, void *context) {
+		APP_LOG(APP_LOG_LEVEL_DEBUG, "Fail!");  
+  }
+
+
 
 static void timer_callback(void *data) {
   /* структура для хранения значений ускорения по всем трем осям */
@@ -92,12 +107,14 @@ static void timer_callback(void *data) {
         channel++; // то следующий по порядку канал 
         if (channel == 5) channel = 1; // по кругу
         snprintf(channel_s, sizeof("Channel: 0"), "Channel: %d", channel);
+     		APP_LOG(APP_LOG_LEVEL_DEBUG, channel_s);  
         text_layer_set_text(channel_layer, channel_s);  /* показываем сообщение */
       } 
       if ((current.y == HYRO_DN)&&(old.y == HYRO_NN)){ // если повернули кисть вправо 
         channel--; // то предыдущий канал 
         if (channel == 0) channel = 4; // по кругу
         snprintf(channel_s, sizeof("Channel: 0"), "Channel: %d", channel);
+     		APP_LOG(APP_LOG_LEVEL_DEBUG, channel_s);  
         text_layer_set_text(channel_layer, channel_s);  /* показываем сообщение */
       } 
     }
@@ -137,7 +154,12 @@ void init(void)
   channel = 1; // по умолчанию у нас включен 1-ый канал
   snprintf(channel_s, sizeof("Channel: 0"), "Channel: %d", channel);
   text_layer_set_text(channel_layer, channel_s);  /* показываем сообщение при запуске программы */
-  
+ 
+ 	// Регистрация обработчиков событий AppMessage
+	app_message_register_inbox_received(in_received_handler); 
+	app_message_register_inbox_dropped(in_dropped_handler); 
+	app_message_register_outbox_failed(out_failed_handler);
+
 	/* Установка связи между телефоном и часами */
   app_message_open(app_message_inbox_size_maximum(), app_message_outbox_size_maximum());
 	
