@@ -1,6 +1,6 @@
 {
     "appKeys": {
-        "msg": 0
+        "message": 0
     },
     "capabilities": [
         ""
@@ -14,11 +14,6 @@
                 "file": "images/lamp.png",
                 "menuIcon": true,
                 "name": "LAMP_IMAGE",
-                "type": "png"
-            },
-            {
-                "file": "images/screen.png",
-                "name": "SCREEN_SHOT",
                 "type": "png"
             }
         ]

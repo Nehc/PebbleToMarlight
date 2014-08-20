@@ -8,7 +8,7 @@ Pebble.addEventListener("ready",
 // Обработка входящих сообщений: отправляем GET запрос, посылаем "эхо" обратно на часы
 Pebble.addEventListener("appmessage",
                         function(e) {
-                          var msg = e.payload.msg; // SETTINGS : PEBBLE KIT JS : MESSAGE KEYS
+                          var msg = e.payload.message; // SETTINGS : PEBBLE KIT JS : MESSAGE KEYS
                           var req = new XMLHttpRequest();
                           req.open('GET', "http://srv:8080/marlight.php?command="+msg, true);
                           req.send(null);
